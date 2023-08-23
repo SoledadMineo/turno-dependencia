@@ -1,0 +1,5 @@
+node_modules
+docker/db/*
+vendor
+Jenkinsfile
+.phpunit.result.cache
