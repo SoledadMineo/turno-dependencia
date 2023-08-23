@@ -61,6 +61,17 @@ build-job:       # This job runs in the build stage, which runs first.
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
+  image: alpine/git:2.40.1
   script:
-    - echo "Deploying application..."
+    - echo "Deploying application... $CI_PIPELINE_IID + $CI_PIPELINE_ID"
     - echo "Application successfully deployed."
+
+#script:
+#  - git config --global user.email "ci@example.com"   # Configuramos el email del commit
+#  - git config --global user.name "CI/CD"            # Configuramos el nombre del commit
+#  - git clone $CI_REPOSITORY_URL tmp_repo            # Clonamos el repositorio en una carpeta temporal
+#  - cd tmp_repo
+#  - echo "Nueva línea en ejemplo.txt" >> ejemplo.txt  # Modificamos el archivo ejemplo.txt
+#  - git add ejemplo.txt
+#  - git commit -m "Modificación automática en ejemplo.txt"  # Hacemos el commit
+#  - git push origin $CI_COMMIT_REF_NAME  # Hacemos push a la rama actual
