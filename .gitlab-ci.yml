@@ -62,12 +62,16 @@ deploy-job:
   stage: deploy
   environment: production
   image: alpine:3.18.3
+  before_script:
+  - apk update && apk add git   # Instalamos Git en la imagen
+
   script:
+    - echo "Deploying application... $CI_PIPELINE_IID + $CI_PIPELINE_ID"
     - git config --global user.email "ci@example.com"   # Configuramos el email del commit
     - git config --global user.name "CI/CD"            # Configuramos el nombre del commit
     - git clone $CI_REPOSITORY_URL tmp_repo            # Clonamos el repositorio en una carpeta temporal
     - cd tmp_repo
-    - echo "Deploying application... $CI_PIPELINE_IID + $CI_PIPELINE_ID"
+
     - echo "Application successfully deployed."
 
 #script:
