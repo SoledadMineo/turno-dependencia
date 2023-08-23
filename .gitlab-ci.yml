@@ -30,6 +30,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker-compose build
     - echo "Compile complete."
     - docker-compose up -d
+    - sleep 30
     - export BUILD_NUMBER=1
     - docker ps
     - docker exec hola_mundo_php_1 php artisan migrate:fresh --seed --env=gitlab
