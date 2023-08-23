@@ -67,6 +67,8 @@ deploy-job:
 
   script:
     - echo "Deploying application... $CI_PIPELINE_IID + $CI_PIPELINE_ID"
+    - echo $CI_PIPELINE_IID
+    - echo $CI_PIPELINE_ID
     - git config --global user.email "ci@example.com"   # Configuramos el email del commit
     - git config --global user.name "CI/CD"            # Configuramos el nombre del commit
     - git clone $CI_REPOSITORY_URL tmp_repo            # Clonamos el repositorio en una carpeta temporal
