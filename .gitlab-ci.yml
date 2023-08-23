@@ -20,31 +20,31 @@ image: docker/compose:1.29.2
 services:
   - docker:dind
 stages:          # List of stages for jobs, and their order of execution
-  - build
+  #- build
   #- test
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build
-  script:
-    - docker-compose build
-    - echo "Compile complete."
-    - docker-compose up -d
-    - sleep 30
-    - export BUILD_NUMBER=3
-    - docker ps
-    - docker exec hola_mundo_php_1 php artisan migrate:fresh --seed --env=gitlab
-    - docker exec -t hola_mundo_php_1 php artisan test --env=gitlab --colors=never
-    - echo "testing OK!"
-    - docker-compose stop
-    - docker tag hola_mundo_nginx:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
-    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
-
-    - docker tag hola_mundo_php:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
-    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
-
-    - docker tag hola_mundo_postgres:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
-    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
+#build-job:       # This job runs in the build stage, which runs first.
+#  stage: build
+#  script:
+#    - docker-compose build
+#    - echo "Compile complete."
+#    - docker-compose up -d
+#    - sleep 30
+#    - export BUILD_NUMBER=3
+#    - docker ps
+#    - docker exec hola_mundo_php_1 php artisan migrate:fresh --seed --env=gitlab
+#    - docker exec -t hola_mundo_php_1 php artisan test --env=gitlab --colors=never
+#    - echo "testing OK!"
+#    - docker-compose stop
+#    - docker tag hola_mundo_nginx:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
+#    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
+#
+#    - docker tag hola_mundo_php:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
+#    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
+#
+#    - docker tag hola_mundo_postgres:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
+#    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
 
 
 
@@ -58,11 +58,15 @@ build-job:       # This job runs in the build stage, which runs first.
 #
 #
 #
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy-job:
+  stage: deploy
   environment: production
-  image: alpine/git:2.40.1
+  image: alpine:3.18.3
   script:
+    - git config --global user.email "ci@example.com"   # Configuramos el email del commit
+    - git config --global user.name "CI/CD"            # Configuramos el nombre del commit
+    - git clone $CI_REPOSITORY_URL tmp_repo            # Clonamos el repositorio en una carpeta temporal
+    - cd tmp_repo
     - echo "Deploying application... $CI_PIPELINE_IID + $CI_PIPELINE_ID"
     - echo "Application successfully deployed."
 
