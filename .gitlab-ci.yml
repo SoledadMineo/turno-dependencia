@@ -31,6 +31,11 @@ build-job:       # This job runs in the build stage, which runs first.
     - echo "Compile complete."
     - docker-compose up -d
     - docker ps
+    - docker exec hola_mundo_php php artisan migrate:fresh --database=seguridad --env=gitlab
+    - docker exec hola_mundo_php php artisan migrate:reset --database=seguridad --env=gitlab
+    - docker exec hola_mundo_php php artisan migrate:fresh --seed --env=gitlab
+    - docker exec -t hola_mundo_php php artisan test --env=gitlab --colors=never
+    - echo "testing OK!"
     - docker-compose stop
 #unit-test-job:   # This job runs in the test stage.
 #  stage: test    # It only starts when the job in the build stage completes successfully.
