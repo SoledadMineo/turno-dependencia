@@ -22,7 +22,7 @@ services:
 stages:          # List of stages for jobs, and their order of execution
   - build
   #- test
-  #- deploy
+  - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -47,7 +47,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
 
 trigger_job:
-  stage: post
+  stage: deploy
   variables:
     CI_DEBUG_TRACE: "true"
     CURRENT_VERSION: $CI_PIPELINE_IID
