@@ -46,7 +46,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker tag hola_mundo_postgres:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
     - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
 
-trigger_job:
+trigger_ahsoka:
   stage: deploy
   variables:
     CI_DEBUG_TRACE: "true"
@@ -54,6 +54,16 @@ trigger_job:
     DEPLOY: hola_mundo
   trigger:
     project: devops/ahsoka
+
+trigger_amalia:
+  stage: deploy
+  variables:
+    CI_DEBUG_TRACE: "true"
+    CURRENT_VERSION: $CI_PIPELINE_ID
+    DEPLOY: hola_mundo
+  trigger:
+    project: devops/amalia
+
 
 
 
