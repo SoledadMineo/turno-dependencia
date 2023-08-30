@@ -24,27 +24,35 @@ stages:          # List of stages for jobs, and their order of execution
   #- test
   - deploy
 
-#build-job:       # This job runs in the build stage, which runs first.
-#  stage: build
-#  script:
-#    - docker-compose build
-#    - echo "Compile complete."
-#    - docker-compose up -d
-#    - sleep 30
-#    - export BUILD_NUMBER=3
-#    - docker ps
-#    - docker exec hola_mundo_php_1 php artisan migrate:fresh --seed --env=gitlab
-#    - docker exec -t hola_mundo_php_1 php artisan test --env=gitlab --colors=never
-#    - echo "testing OK!"
-#    - docker-compose stop
-#    - docker tag hola_mundo_nginx:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
-#    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
-#
-#    - docker tag hola_mundo_php:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
-#    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
-#
-#    - docker tag hola_mundo_postgres:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
-#    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - docker-compose build
+    - echo "Compile complete."
+    - docker-compose up -d
+    - sleep 30
+    - export BUILD_NUMBER=$CI_PIPELINE_IID
+    - docker ps
+    - docker exec hola_mundo_php_1 php artisan migrate:fresh --seed --env=gitlab
+    - docker exec -t hola_mundo_php_1 php artisan test --env=gitlab --colors=never
+    - echo "testing OK!"
+    - docker-compose stop
+    - docker tag hola_mundo_nginx:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
+    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_nginx:GL-$BUILD_NUMBER
+
+    - docker tag hola_mundo_php:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
+    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_php:GL-$BUILD_NUMBER
+
+    - docker tag hola_mundo_postgres:latest  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
+    - docker push  mpf-reg.jus.mendoza.gov.ar:9999/amalia/hola_mundo_postgres:GL-$BUILD_NUMBER
+
+trigger_job:
+  variables:
+    CI_DEBUG_TRACE: "true"
+    CURRENT_VERSION: $CI_PIPELINE_IID
+    DEPLOY: hola_mundo
+  trigger:
+    project: devops/ahsoka
 
 
 
