@@ -9,6 +9,6 @@
     </head>
     <body class="antialiased">
         <div id="app"></div>
-        <h1>Hola Mundo 1</h1>
+        <h1>Hola {{ $user ?? 'Pablito'}}!!</h1>
     </body>
 </html>

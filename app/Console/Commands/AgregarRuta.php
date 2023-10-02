@@ -37,7 +37,7 @@ class AgregarRuta extends Command
             ]);
             $resp = Http::withHeaders(['X-Api-Key'=> 'edd1c9f034335f136f87ad84b625c8f1'])
             ->post('http://apisix:9180/apisix/admin/routes', [
-            "uri" => "/hola/*",
+            "uri" => "/seguro/*",
             "name"=> "hola_seguro",
             "upstream"=> [
                 "nodes"=> ["nginx-hola_mundo:80"=>1],

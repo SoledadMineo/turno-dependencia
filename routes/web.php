@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/{user?}', function ($user=null) {
+    return view('welcome', ['user'=> $user] );
 });
 
 Route::get('/denuncia/{codigo}', function ($codigo) {
